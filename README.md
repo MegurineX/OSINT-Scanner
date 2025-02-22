@@ -34,7 +34,7 @@ pip install -r requirements.txt
 ```
 
 ### 3️⃣ **Setup API Keys**
-  Edit api_keys.env and add your API keys
+  Edit api_keys.env inside **configs** folder and add your API keys
 *Example:*
 ```
 HUNTER_API_KEY=your_hunter_api_key
@@ -129,7 +129,7 @@ including:
 
 ### 1️⃣ *How do I add more APIs?*
 
-  Edit api_keys.env and add your API keys.
+  Edit api_keys.env inside **configs** folder and add your API keys.
 
 ### 2️⃣ *Can i scan without API keys?*
 
