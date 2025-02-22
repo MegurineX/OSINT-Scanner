@@ -1,16 +1,14 @@
 import os
 import json
 import requests
-from tqdm import tqdm  # 🔹 Import tqdm untuk progress bar
+from tqdm import tqdm
 from tabulate import tabulate
 from colorama import Fore, Style, init
 from config import API_KEYS
 
-# 🔹 Inisialisasi Colorama
 init(autoreset=True)
 
 def get_colored_status(status):
-    """Mengembalikan status berwarna untuk terminal"""
     if status == "VALID":
         return Fore.GREEN + status + Style.RESET_ALL
     elif status == "INVALID":
@@ -22,9 +20,8 @@ def scan_email_api(email):
     """ Mode 2: Scan Email via API """
     
     results = []
-    table_data = []  # Untuk tampilan tabel
+    table_data = []
 
-    # 🔹 API yang digunakan untuk scan email
     api_services = {
         "Hunter.io": f"https://api.hunter.io/v2/email-verifier?email={email}&api_key={API_KEYS.get('HUNTER_API_KEY')}",
         "EmailRep.io": f"https://emailrep.io/{email}",
@@ -40,7 +37,6 @@ def scan_email_api(email):
 
     print(f"\n{Fore.CYAN}[+] Checking Email via API: {email} {Style.RESET_ALL}\n")
 
-    # 🔹 Gunakan tqdm untuk menunjukkan progres scanning API
     for service, url in tqdm(api_services.items(), desc="Checking Email APIs", unit="API", leave=False):
         try:
             headers = {}
@@ -69,23 +65,18 @@ def scan_email_api(email):
         except requests.RequestException:
             status = "ERROR"
 
-        # ✅ Warna hanya untuk terminal
         status_terminal = get_colored_status(status)
 
-        # ✅ Simpan status tanpa warna di JSON
         results.append({"Service": service, "URL": url, "Status": status})
-        table_data.append([service, status_terminal])  # Tambahkan ke tabel
+        table_data.append([service, status_terminal])
 
-        # 🔹 Menampilkan hasil scanning di terminal
         print(f"{service}: {status_terminal}")
 
-    # 🔹 Tampilkan hasil dalam tabel
     if results:
         print("\n" + tabulate(table_data, headers=["Service", "Status"], tablefmt="grid"))
     else:
-        print(f"{Fore.RED}[ERROR] Tidak ada hasil ditemukan!{Style.RESET_ALL}")
+        print(f"{Fore.RED}[ERROR] No results found!{Style.RESET_ALL}")
 
-    # 🔹 Simpan hasil dalam format JSON yang lebih rapi
     json_output = {
         "identifier": email,
         "mode": "Email API Check",
@@ -99,4 +90,4 @@ def scan_email_api(email):
     with open(json_filename, "w", encoding="utf-8") as json_file:
         json.dump(json_output, json_file, indent=4)
 
-    print(f"\n{Fore.GREEN}[INFO] Hasil email check telah disimpan dalam file: {json_filename}{Style.RESET_ALL}")
+    print(f"\n{Fore.GREEN}[INFO] The email check results have been saved in a file: {json_filename}{Style.RESET_ALL}")
