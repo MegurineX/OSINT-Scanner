@@ -5,11 +5,9 @@ from tqdm import tqdm
 from tabulate import tabulate
 from colorama import Fore, Style, init
 
-# 🔹 Inisialisasi Colorama
 init(autoreset=True)
 
 def get_colored_status(status):
-    """Mengembalikan status berwarna untuk terminal"""
     if status == "FOUND":
         return Fore.GREEN + status + Style.RESET_ALL
     elif status == "NOT FOUND":
@@ -17,7 +15,6 @@ def get_colored_status(status):
     else:
         return Fore.YELLOW + status + Style.RESET_ALL
 
-# 🔹 Website List (Scan Per Kategori)
 WEBSITES = {
     "Social Media": {
         "Facebook": "https://www.facebook.com/{}",
@@ -92,25 +89,22 @@ def scan_osint(identifier, mode, category=None):
 
     print(f"\n{Fore.CYAN}[+] Scanning {identifier} on websites...\n{Style.RESET_ALL}")
 
-    # 🔹 Pilih daftar website berdasarkan kategori atau semua
     sites_to_check = WEBSITES.get(category, {}) if category else {site: url for cat in WEBSITES.values() for site, url in cat.items()}
 
     if not sites_to_check:
-        print(f"{Fore.RED}[ERROR] Kategori tidak ditemukan atau kosong!{Style.RESET_ALL}")
+        print(f"{Fore.RED}[ERROR] Category not found or empty!{Style.RESET_ALL}")
         return
 
     for site_name, url_template in tqdm(sites_to_check.items(), desc="Checking", unit="site"):
         try:
-            url = url_template.format(identifier)  # 🔹 Format URL dengan identifier
+            url = url_template.format(identifier)
             response = requests.get(url, timeout=5)
             status = "FOUND" if response.status_code == 200 else "NOT FOUND"
         except requests.RequestException:
             status = "TIMEOUT/ERROR"
 
-        # ✅ Warna hanya untuk terminal
         status_terminal = get_colored_status(status)
 
-        # ✅ Simpan status tanpa warna di JSON
         results.append({
             "Category": category if category else "All",
             "Site": site_name,
@@ -118,16 +112,13 @@ def scan_osint(identifier, mode, category=None):
             "URL": url_template.format(identifier)
         })
 
-        # 🔹 Menampilkan hasil di terminal
         print(f"{site_name}: {status_terminal}")
 
-    # 🔹 Tampilkan hasil dalam tabel
     if results:
         print("\n" + tabulate(results, headers="keys", tablefmt="grid"))
     else:
-        print(f"{Fore.RED}[ERROR] Tidak ada hasil ditemukan!{Style.RESET_ALL}")
+        print(f"{Fore.RED}[ERROR] No results found!{Style.RESET_ALL}")
 
-    # 🔹 Simpan hasil dalam format JSON yang lebih rapi
     json_output = {
         "identifier": identifier,
         "mode": "OSINT",
@@ -142,4 +133,4 @@ def scan_osint(identifier, mode, category=None):
     with open(json_filename, "w", encoding="utf-8") as json_file:
         json.dump(json_output, json_file, indent=4)
 
-    print(f"\n{Fore.GREEN}[INFO] Hasil scan telah disimpan dalam file: {json_filename}{Style.RESET_ALL}")
+    print(f"\n{Fore.GREEN}[INFO] The scan results have been saved in the file: {json_filename}{Style.RESET_ALL}")
