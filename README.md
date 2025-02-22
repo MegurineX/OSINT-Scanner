@@ -134,6 +134,7 @@ including:
 ### 2️⃣ *Can i scan without API keys?*
 
   Yes! **Basic scanning (Username & Emails) works without API keys.**
+  
   However, **email & phone verification require APIs.**
 
 ### 3️⃣ *How to update the tool?*
@@ -150,7 +151,7 @@ pip install -r requirements.txt
 ---
 
 ## 🤝 **Contributing**
-Feel free to contribute! Fork the repo, make changes, nad create a pull request.
+Feel free to contribute! Fork the repo, make changes, and create a pull request.
 
 **•** **Author   :** MegurineX
 
