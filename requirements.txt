@@ -1,0 +1,8 @@
+os
+time
+pyfiglet
+colorama
+requests
+json
+tqdm
+tabulate
