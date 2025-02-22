@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-# 🔹 Load API keys dari file .env
 load_dotenv("configs/api_keys.env")
 
 API_KEYS = {
