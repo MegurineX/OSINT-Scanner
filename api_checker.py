@@ -1,16 +1,14 @@
 import os
 import json
 import requests
-from tqdm import tqdm  # 🔹 Import tqdm untuk progress bar
+from tqdm import tqdm
 from tabulate import tabulate
 from colorama import Fore, Style, init
 from config import API_KEYS
 
-# 🔹 Inisialisasi Colorama
 init(autoreset=True)
 
 def get_colored_status(status):
-    """Mengembalikan status berwarna untuk terminal"""
     if status == "FOUND":
         return Fore.GREEN + status + Style.RESET_ALL
     elif status == "NOT FOUND":
@@ -22,7 +20,7 @@ def scan_api_checker(identifier):
     """ Mode 5: API Checker for Username/Email """
 
     results = []
-    table_data = []  # Untuk tampilan tabel
+    table_data = []
 
     api_services = {
         "Twitter": f"https://api.twitter.com/2/users/by/username/{identifier}",
@@ -40,7 +38,6 @@ def scan_api_checker(identifier):
 
     print(f"\n{Fore.CYAN}[+] Scanning API for: {identifier} {Style.RESET_ALL}\n")
 
-    # 🔹 Gunakan tqdm untuk menunjukkan progres scanning API
     for service, url in tqdm(api_services.items(), desc="Checking APIs", unit="API", leave=False):
         try:
             response = requests.get(url, timeout=5)
@@ -48,23 +45,18 @@ def scan_api_checker(identifier):
         except requests.RequestException:
             status = "ERROR"
 
-        # ✅ Warna hanya untuk terminal
         status_terminal = get_colored_status(status)
-
-        # ✅ Simpan status tanpa warna di JSON
+        
         results.append({"Service": service, "URL": url, "Status": status})
-        table_data.append([service, status_terminal])  # Tambahkan ke tabel
+        table_data.append([service, status_terminal])
 
-        # 🔹 Menampilkan hasil scanning di terminal
         print(f"{service}: {status_terminal}")
 
-    # 🔹 Tampilkan hasil dalam tabel
     if results:
         print("\n" + tabulate(table_data, headers=["Service", "Status"], tablefmt="grid"))
     else:
-        print(f"{Fore.RED}[ERROR] Tidak ada hasil ditemukan!{Style.RESET_ALL}")
+        print(f"{Fore.RED}[ERROR] No results found!{Style.RESET_ALL}")
 
-    # 🔹 Simpan hasil dalam format JSON yang lebih rapi
     json_output = {
         "identifier": identifier,
         "mode": "API Checker",
@@ -78,4 +70,4 @@ def scan_api_checker(identifier):
     with open(json_filename, "w", encoding="utf-8") as json_file:
         json.dump(json_output, json_file, indent=4)
 
-    print(f"\n{Fore.GREEN}[INFO] Hasil scan API telah disimpan dalam file: {json_filename}{Style.RESET_ALL}")
+    print(f"\n{Fore.GREEN}[INFO] The API scan results have been saved in the file: {json_filename}{Style.RESET_ALL}")
