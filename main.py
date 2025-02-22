@@ -7,21 +7,17 @@ from email_scanner import scan_email_api
 from colorama import Fore, Style, init
 import pyfiglet
 
-# 🔹 Bersihkan terminal
 def clear_terminal():
     os.system("cls" if os.name == "nt" else "clear")
 
-# 🔹 Inisialisasi colorama
 init(autoreset=True)
 
-# 🔹 Warna Neon Idol (Miku & Love Live)
 CYAN = Fore.CYAN
 PINK = Fore.MAGENTA
 YELLOW = Fore.YELLOW
 RESET = Style.RESET_ALL
 
 def print_banner():
-    """Menampilkan Ascii Art MegurineX dengan efek warna"""
     clear_terminal()
     ascii_banner = pyfiglet.figlet_format("MegurineX", font="slant")
     
@@ -30,18 +26,16 @@ def print_banner():
         print(CYAN + line if i % 2 == 0 else PINK + line)
         time.sleep(0.05)
 
-    # 🔹 Info Tambahan (Setelah banner)
     print(YELLOW + "=" * 50)
     print(YELLOW + " GitHub   : https://github.com/MegurineX")
     print(YELLOW + " Telegram : https://t.me/MegurineChan")
-    print(YELLOW + " Email    : ariefrhmns123@gmail.com")
+    print(YELLOW + " Email    : ariefrhmns02@gmail.com")
     print(YELLOW + "=" * 50 + RESET)
 
 def main():
-    print_banner()  # 🔹 Tampilkan banner sebelum menu
+    print_banner()
 
     while True:
-        # 🔹 Menu utama
         print(f"{CYAN}          🔍 OSINT SCANNER MENU 🔍{RESET}")
         print(YELLOW + "=" * 50)
         print("1. Username Scan")
@@ -50,23 +44,22 @@ def main():
         print("99. Exit")
         print(YELLOW + "=" * 50 + RESET)
         
-        choice = input("\nMasukkan pilihan (1-3, 99 untuk exit): ").strip()
+        choice = input("\nInput options (1-3, 99 for exit): ").strip()
 
         if choice == "99":
-            print("\n[INFO] Keluar dari program...")
+            print("\n[INFO] Exit the program, thank you for using this tool - MegurineX")
             break
         elif choice not in ["1", "2", "3"]:
-            print(f"{Fore.RED}[ERROR] Pilihan tidak valid!{Style.RESET_ALL}")
+            print(f"{Fore.RED}[ERROR] Invalid choice!{Style.RESET_ALL}")
             time.sleep(1)
             continue
 
-        identifier = input("\nMasukkan data yang ingin dicari: ").strip()
+        identifier = input("\nEnter the data you want to search for: ").strip()
 
-        # 🔹 Pilih mode scanning
         clear_terminal()
         print_banner()
         print("\n" + YELLOW + "=" * 50)
-        print(f"{CYAN}          🔍 PILIH MODE SCAN 🔍{RESET}")
+        print(f"{CYAN}          🔍 SELECT SCAN MODE 🔍{RESET}")
         print(YELLOW + "=" * 50)
         print("1. All Websites (Username/Email)")
         print("2. Check Email (Using API)")
@@ -76,17 +69,17 @@ def main():
         print("0. Back")
         print(YELLOW + "=" * 50 + RESET)
 
-        mode = input("\nMasukkan pilihan (0-5): ").strip()
+        mode = input("\nEnter options (0-5): ").strip()
 
         if mode == "0":
-            continue  # Kembali ke menu utama
+            continue
 
         category = None
-        if mode == "3":  # 🔹 Pilih kategori jika mode adalah kategori scanning
+        if mode == "3":
             clear_terminal()
             print_banner()
             print("\n" + YELLOW + "=" * 50)
-            print(f"{CYAN}          📂 PILIH KATEGORI 📂{RESET}")
+            print(f"{CYAN}          📂 SELECT CATEGORY 📂{RESET}")
             print(YELLOW + "=" * 50)
             print("1. Social Media")
             print("2. Gaming")
@@ -96,10 +89,10 @@ def main():
             print("0. Back")
             print(YELLOW + "=" * 50 + RESET)
 
-            cat_choice = input("\nMasukkan pilihan (0-5): ").strip()
+            cat_choice = input("\nEnter options (0-5): ").strip()
 
             if cat_choice == "0":
-                continue  # Kembali ke mode scanning
+                continue
 
             categories = {
                 "1": "Social Media",
@@ -110,21 +103,20 @@ def main():
             }
             category = categories.get(cat_choice)
 
-        # 🔹 Jalankan scanning sesuai mode
         clear_terminal()
         print_banner()
         if mode == "1" or mode == "3":
             scan_osint(identifier, mode, category)
         elif mode == "2":
-            scan_email_api(identifier)  # Mode Email API
+            scan_email_api(identifier)  # Email API Mode
         elif mode == "4":
-            scan_phone(identifier)  # Mode Phone Scan
+            scan_phone(identifier)  # Phone Scan mode
         elif mode == "5":
-            scan_api_checker(identifier)  # Mode API Checker
+            scan_api_checker(identifier)  # API Checker mode
         else:
-            print(f"{Fore.RED}[ERROR] Pilihan tidak valid!{Style.RESET_ALL}")
+            print(f"{Fore.RED}[ERROR] Invalid choice!{Style.RESET_ALL}")
 
-        input("\nTekan ENTER untuk kembali ke menu utama...")  # Pause sebelum kembali
+        input("\nPress ENTER to return to the main menu...")
         clear_terminal()
         print_banner()
 
